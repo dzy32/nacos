@@ -112,7 +112,9 @@ public class InstanceOperatorServiceImpl implements InstanceOperator {
     
     @Override
     public void registerInstance(String namespaceId, String serviceName, Instance instance) throws NacosException {
+        //把v2版本的转换为v1版本的
         com.alibaba.nacos.naming.core.Instance coreInstance = parseInstance(instance);
+        //执行注册实例
         serviceManager.registerInstance(namespaceId, serviceName, coreInstance);
     }
     

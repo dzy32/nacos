@@ -100,7 +100,7 @@ public class InstanceControllerV2 {
             @RequestParam Integer port, @RequestParam(defaultValue = "true") Boolean healthy,
             @RequestParam(defaultValue = "1") Double weight, @RequestParam(defaultValue = "true") Boolean enabled,
             @RequestParam String metadata, @RequestParam Boolean ephemeral) throws Exception {
-        
+        //检查服务命名规范
         NamingUtils.checkServiceNameFormat(serviceName);
         checkWeight(weight);
         final Instance instance = InstanceBuilder.newBuilder().setServiceName(serviceName).setIp(ip)
@@ -109,6 +109,7 @@ public class InstanceControllerV2 {
         if (ephemeral == null) {
             instance.setEphemeral((switchDomain.isDefaultInstanceEphemeral()));
         }
+        //注册服务实现类
         instanceServiceV2.registerInstance(namespaceId, serviceName, instance);
         return "ok";
     }
