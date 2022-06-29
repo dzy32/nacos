@@ -137,19 +137,21 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
      * @param value record
      */
     public void onPut(String key, Record value) {
-        
+        //命中临时实例
         if (KeyBuilder.matchEphemeralInstanceListKey(key)) {
+            //实例化datum
             Datum<Instances> datum = new Datum<>();
             datum.value = (Instances) value;
             datum.key = key;
             datum.timestamp.incrementAndGet();
+            //注入
             dataStore.put(key, datum);
         }
-        
+        //在createEmptyService方法中，添加了监听器，所以此处返回true
         if (!listeners.containsKey(key)) {
             return;
         }
-        
+        //向内部的notifier对象中添加一个任务
         notifier.addTask(key, DataOperation.CHANGE);
     }
     
